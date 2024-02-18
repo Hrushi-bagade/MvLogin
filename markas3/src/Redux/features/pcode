@@ -1,0 +1,235 @@
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import APIService from "./utils/APIservice";
+
+const initialState = {
+  data: [],
+  currentProcedureCodeOrganizationBUWise: {
+    id: 0,
+    procedureCode: {
+      id: 0,
+      code: "",
+      createdBy: "1",
+      createdDate: new Date(),
+      isActive: true,
+    },
+    organization: {
+      id: 0,
+      name: "",
+      ContactInfo: {
+        AddressLine: "",
+        AddressLine1: "",
+        city: "",
+        state: "",
+        county: "",
+        zip: "",
+        phone: "",
+        fax: "",
+        createdBy: "1",
+        createdDate: new Date(),
+        updatedBy: 1,
+        updatedDate: new Date(),
+        isActive: true,
+      },
+      logoImagePath: "",
+      Address1: "",
+      Address2: "",
+      city: "",
+      state: {
+        id: 0,
+        name: "",
+      },
+      zipcode: "",
+      country: {
+        id: 0,
+        name: "",
+      },
+      createdBy: "1",
+      createdDate: new Date(),
+      updatedBy: 1,
+      updatedDate: new Date(),
+      isActive: true,
+    },
+    businessUnit: {
+      id: 0,
+      name: "string",
+      organization: {
+        id: 0,
+        name: "",
+        ContactInfo: {
+          AddressLine: "",
+          AddressLine1: "",
+          city: "",
+          state: "",
+          county: "",
+          zip: "",
+          phone: "",
+          fax: "",
+          createdBy: "1",
+          createdDate: new Date(),
+          updatedBy: 1,
+          updatedDate: new Date(),
+          isActive: true,
+        },
+      },
+      address1: "string",
+      address2: "string",
+      city: "string",
+      zipCode: "string",
+    },
+    unitValue: 0,
+    price: 0,
+    effectiveFromDate: new Date(),
+    effectiveToDate: new Date(),
+    createdBy: "1",
+    createdDate: new Date(),
+    updatedBy: 1,
+    updatedDate: new Date(),
+    isActive: true,
+  },
+  loading: false,
+  error: null,
+};
+
+export const ProcedureCodeOrganizationBUWiseSlice = createSlice({
+  name: "ProcedureCodeOrganizationBUWiseSlice",
+  initialState,
+  reducers: {
+    fetchDataSuccess: (state, action) => {
+      state.loading = false;
+      state.data = action.payload;
+    },
+    getById: (state, action) => {
+      const index = state.data.findIndex((item) => item.id === action.payload);
+      state.currentProcedureCodeOrganizationBUWise =
+        state.data[index];
+    },
+    editProcedureCodeSuccess: (state, action) => {
+      const UpdatedData = action.payload;
+      const index = state.data.findIndex(
+        (item) => item.id === UpdatedData.id
+      );
+      if (index !== -1) {
+        state.data[index] = UpdatedData;
+      }
+    },
+    deleteProcedureCodeSuccess: (state, action) => {
+      const Data = action.payload;
+      state.data = state.data.filter(
+        (item) => item.id !== Data
+      );
+    },
+  },
+});
+
+export default ProcedureCodeOrganizationBUWiseSlice.reducer;
+export const {
+  fetchDataSuccess,
+  getById,
+  editProcedureCodeSuccess,
+  deleteProcedureCodeSuccess,
+} = ProcedureCodeOrganizationBUWiseSlice.actions;
+
+export const fetchData =
+  (token) =>
+  async (dispatch) => {
+    try {
+      const data = await APIService.GET(
+        "ProcedureCodeOrganizationBUWise/GetAll",
+        token
+      );
+
+      if (!data.success) {
+        toast.error(
+          "Something went wrong with the user fetch.\n" + data.message
+        );
+        return;
+      }
+      dispatch(fetchDataSuccess(data.data));
+    } catch (error) {}
+  };
+
+export const editProcedureCode =
+  (token, updateData) =>
+  async (dispatch) => {
+    try {
+      const data = await APIService.UPDATE(
+        "ProcedureCodeOrganizationBUWise/Update",
+        updateData,
+        token
+      );
+      if (!data.success) {
+        toast.error(
+          "Something went wrong with update.\n" + data.message
+        );
+        return;
+      } else {
+        toast.success(data.message);
+      }
+      dispatch(editProcedureCodeSuccess(updateData));
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+export const ExportPCOragnizationBuWise =
+  (token, fileName, BuId) =>
+  async (dispatch) => {
+    try {
+      const DepartmentExport = await APIService.EXPORTBYBUID(
+        `ProcedureCodeOrganizationBUWise/Export`,
+        token,
+        fileName,
+        BuId
+      );
+      if (!DepartmentExport.success) {
+        toast.error("Something went wrong with Export" + DepartmentExport.message);
+        return;
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+export const addProcedureCode =
+  (token, addData) =>
+  async (dispatch) => {
+    try {
+      const data = await APIService.PUT(
+        "ProcedureCodeOrganizationBUWise/Add",
+        addData,
+        token
+      );
+      if (!data.success) {
+        toast.error(
+          "Something went wrong with the add.\n" + data.message
+        );
+        return;
+      } else {
+        toast.success(data.message);
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+export const deleteProcedureCode =
+  (token, id, userId) =>
+  async (dispatch) => {
+    try {
+      const data = await APIService.DELETE(
+        `ProcedureCodeOrganizationBUWise/${id}/${userId}`,
+        token
+      );
+      if (!data.success) {
+        toast.error(
+          "Something went wrong with update.\n" + data.message
+        );
+        return;
+      } else {
+        dispatch(deleteProcedureCodeSuccess(parseInt(id)));
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  };

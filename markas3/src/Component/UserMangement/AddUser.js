@@ -6,7 +6,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import defaultImage from "./HPz3fFn.png";
-
+import toast from 'toastr';
 const AddUser = ({ show, setShow }) => {
   const handleClose = () => setShow(false);
   const [image, setImage] = useState({
@@ -22,7 +22,18 @@ const AddUser = ({ show, setShow }) => {
       localFile.type === "image/jpg" ||
       localFile.type === "image/svg"
     ) {
-        
+        const reader =new FileReader()
+        reader.onload=(r)=>{
+          setImage({
+            placeholderUrl:r.target.result,
+            imageData:e.target.files[0]
+          })
+        }
+        reader.readAsDataURL(localFile)
+    }
+    else{
+      toast.error("Invalid File !")
+      image.imageData=null
     }
   };
   return (
