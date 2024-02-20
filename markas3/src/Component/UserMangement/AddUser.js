@@ -10,9 +10,9 @@ import DatePicker from "react-datepicker";
 import Select from "react-select";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import * as Yup from "yup";
-import { ToastContainer, toast } from "react-toastify";
-import * as formik from "formik";
+// import * as Yup from "yup";
+// import { ToastContainer, toast } from "react-toastify";
+// import * as formik from "formik";
 
 const AddUser = ({ show, setShow }) => {
   const handleClose = () => setShow(false);
@@ -337,7 +337,7 @@ const AddUser = ({ show, setShow }) => {
       };
       reader.readAsDataURL(localFile);
     } else {
-      toast.error("Invalid File !");
+      // toast.error("Invalid File !");
       image.imageData = null;
     }
   };
@@ -350,10 +350,10 @@ const AddUser = ({ show, setShow }) => {
     const isValid = validateForm();
     if (isValid) {
       console.log("Form Submitted", formData);
-      toast.success("Form submitted")
+      // toast.success("Form submitted")
     } else {
       console.log("Form Validation Failed");
-      toast.error("errorr")
+      // toast.error("errorr")
     }
   };
 
