@@ -18,8 +18,8 @@ const AddUser = ({ show, setShow }) => {
       imageFormData: "",
       firstname: "",
       lastName: "",
-      phoneNumber1: null,
-      phoneNumber2: null,
+      phoneNumber1: NaN,
+      phoneNumber2: NaN,
       teloff: "",
       telres: "",
       fax: "",
@@ -147,8 +147,8 @@ const AddUser = ({ show, setShow }) => {
     imageFormData: "",
     firstname: "",
     lastName: "",
-    phoneNumber1: null,
-    phoneNumber2: null,
+    phoneNumber1: NaN,
+    phoneNumber2: NaN,
     teloff: "",
     telres: "",
     fax: "",
@@ -179,11 +179,13 @@ const AddUser = ({ show, setShow }) => {
     twitterUrl: "",
     teams: "",
   });
-  const [apiDepartmentData, setApiDepartmentData] = useState([]);
-
+  const [apiDepartmentData, setApiDepartmentData] = useState([]);   //state for  api data of Department
+  const [apiDesignation, setApiDesignationData] =useState([])  //state  for holding the Designation Data from API.
+  const [apiCountry,setApiCountryData]=useState([])  //state for   holding the country list from API
   //department fetch Data
 
   useEffect(() => {
+      //department fetch Data
     async function fetchDepartment() {
       try {
         const response = await fetch("http://192.168.1.62/MARKASV3/api/UserMaster/Departments");
@@ -201,9 +203,44 @@ const AddUser = ({ show, setShow }) => {
         console.error("Error fetching Department data ", error.message);
       }
     }
-    
+    async function fetchDesignation() {
+      try {
+        const response = await fetch("http://192.168.1.62/MARKASV3/api/UserMaster/Designations");
+  
+        // Check if the response is OK
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // Parse the JSON data from the response
+        const data = await response.json();
+        
+        console.log("Designation Data ", data.value);
+        setApiDesignationData(data.value);
+      } catch (error) {
+        console.error("Error fetching Designation data ", error.message);
+      }
+    }
+    async function fetchCountry() {
+      try {
+        const response = await fetch("http://192.168.1.62/MARKASV3/api/UserMaster/Geography");
+  
+        // Check if the response is OK
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // Parse the JSON data from the response
+        const data = await response.json();
+        
+        console.log("Country Data ", data.value);
+        setApiCountryData(data.value);
+      } catch (error) {
+        console.error("Error fetching Country data ", error.message);
+      }
+    }
+    fetchCountry();
     fetchDepartment();
-    console.log("Api Department Data ",...apiDepartmentData)
+    fetchDesignation();
+    console.log("Api Country Data ",...apiCountry)
   }, []);
 
   const fileInputRef = useRef(null);
@@ -296,7 +333,7 @@ const AddUser = ({ show, setShow }) => {
     if (!formData.phoneNumber1) {
       newErrors.phoneNumber1 = "Contact number is required";
       isValid = false;
-    } else if (formData.phoneNumber2.toString().length !== 10) {
+    } else if (formData.phoneNumber1.toString().length !== 10) {
       console.log("phone1 lenght ", formData.phoneNumber1.toString().length);
       newErrors.phoneNumber1 = "Contact number must be 10 digits";
       isValid = false;
@@ -310,7 +347,7 @@ const AddUser = ({ show, setShow }) => {
     }
     const emailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (formData.emailId1) {
-      if (!emailFormat.test(formData.emailId2)) {
+      if (!emailFormat.test(formData.emailId1)) {
         newErrors.emailId1 = "Invalid Email Format";
         isValid = false;
       }
@@ -457,7 +494,7 @@ const AddUser = ({ show, setShow }) => {
     // Update the formData state with the selected country value
     setFormData({
       ...formData,
-      businessCountry: selectedOption.value,
+      businessCountry: selectedOption.gesgeographY_NAME,
     });
   };
 
@@ -465,7 +502,7 @@ const AddUser = ({ show, setShow }) => {
     // Update the formData state with the selected country value
     setFormData({
       ...formData,
-      homeCountry: selectedOption.value,
+      homeCountry: selectedOption.gesgeographY_NAME,
     });
   };
 
@@ -487,7 +524,7 @@ const AddUser = ({ show, setShow }) => {
     // Update the formData state with the selected country value
     setFormData({
       ...formData,
-      designation: selectedOption.value,
+      designation: selectedOption.dssdesignationname,
     });
   };
 
@@ -834,7 +871,7 @@ const AddUser = ({ show, setShow }) => {
                           className={`border rounded ${
                             errors.designation ? "border-danger" : ""
                           }`}
-                          options={DesignationOptions}
+                          options={apiDesignation}
                           isSearchable={true}
                           required
                           autoFocus
@@ -902,7 +939,7 @@ const AddUser = ({ show, setShow }) => {
                         className="mb-3"
                         controlId="exampleForm.ControlInput1"
                       >
-                        <Form.Label>Contact Number</Form.Label>
+                        <Form.Label>Contact Number <span className="text-danger">*</span></Form.Label>
                         <Form.Control
                           type="number"
                           required
@@ -1242,7 +1279,7 @@ const AddUser = ({ show, setShow }) => {
                       <Select
                         onChange={handleBusinessCountryChange}
                         placeholder="Country"
-                        options={countryOptions}
+                        options={apiCountry}
                         isSearchable={true}
                       />
                     </Col>
@@ -1250,7 +1287,7 @@ const AddUser = ({ show, setShow }) => {
                       <Select
                         onChange={handleHomeCountryChange}
                         required
-                        options={countryOptions}
+                        options={apiCountry}
                         placeholder="Country"
                         isSearchable={true}
                       />
