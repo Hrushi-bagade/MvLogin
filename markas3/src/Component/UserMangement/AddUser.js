@@ -6,7 +6,6 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import defaultImage from "./HPz3fFn.png";
-import DatePicker from "react-datepicker";
 import Select from "react-select";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
