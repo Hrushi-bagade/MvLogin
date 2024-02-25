@@ -45,25 +45,20 @@ const Input = styled.input`
   }
 `;
 
-const ToggleSwitch = () => {
-  const [checked, setChecked] = useState(false);
-
+const ToggleSwitch = ({ checked, onToggleChange }) => {
   const handleChange = (e) => {
-    setChecked(e.target.checked);
+    const isChecked = e.target.checked;
+    onToggleChange(isChecked);
   };
 
   return (
+    <>
     <Label>
       <Input checked={checked} type="checkbox" onChange={handleChange} />
       <Switch />
     </Label>
+   </> 
   );
 };
 
-export default function SwitchToggle() {
-  return (
-    <>
-      <ToggleSwitch />
-    </>
-  );
-}
+export default ToggleSwitch

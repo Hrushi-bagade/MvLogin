@@ -149,9 +149,20 @@ const ReactDataTable = () => {
   ];
   const [search, setSearch] = useState("");
   const [filterapiData, setFilterApiData] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
+  
+  const handleToggleChange = (row, checked) => {
+    const updatedData = filterapiData.map((data) =>
+      data === row ? { ...data, usrActive: checked ? 'Y' : 'N' } : data
+    );
+    setFilterApiData(updatedData);
+  };
   useEffect(() => {
     setFilterApiData(data);
   }, []);
+  
+
+
   useEffect(() => {
     const result = data.filter((data) => {
       return data.FullName.toLowerCase().match(search.toLowerCase());
@@ -196,7 +207,8 @@ const ReactDataTable = () => {
     {
       name: "usrActive",
       cell: (row) => (
-        <SwitchToggle/>)
+        <ToggleSwitch checked={row.usrActive === 'Y'} onToggleChange={(checked) => handleToggleChange(row, checked)} />
+      )
     },
     {
       name: "Action",
