@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { SortOrder } from "react-data-table-component";
+import ToggleSwitch from "../../smallComponents/toggleSwitch";
+import SwitchToggle from "../../smallComponents/toggleSwitch";
 const ReactDataTable = () => {
   const data = [
     {
@@ -177,31 +179,6 @@ const ReactDataTable = () => {
       sortable: true,
     },
     {
-        name: "Department",
-        selector: (row) => row.Department,
-        sortable: true,
-      },
-      {
-        name: "Department",
-        selector: (row) => row.Department,
-        sortable: true,
-      },
-      {
-        name: "Department",
-        selector: (row) => row.Department,
-        sortable: true,
-      },
-      {
-        name: "Department",
-        selector: (row) => row.Department,
-        sortable: true,
-      },
-      {
-        name: "Department",
-        selector: (row) => row.Department,
-        sortable: true,
-      },
-    {
       name: "DOB",
       selector: (row) => row.DOB,
       sortable: true,
@@ -218,8 +195,8 @@ const ReactDataTable = () => {
     },
     {
       name: "usrActive",
-      selector: (row) => row.usrActive,
-      sortable: true,
+      cell: (row) => (
+        <SwitchToggle/>)
     },
     {
       name: "Action",
