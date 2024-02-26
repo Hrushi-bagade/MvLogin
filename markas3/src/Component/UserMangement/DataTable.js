@@ -206,12 +206,14 @@ const ReactDataTable = () => {
     },
     {
       name: "usrActive",
+      width: '100px',
       cell: (row) => (
         <ToggleSwitch checked={row.usrActive === 'Y'} onToggleChange={(checked) => handleToggleChange(row, checked)} />
       )
     },
     {
       name: "Action",
+      width: '100px',
       cell: (row) => (
         <button
           className="btn btn-outline-primary "
