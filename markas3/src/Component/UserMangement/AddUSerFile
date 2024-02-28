@@ -1,0 +1,1442 @@
+import React, { useState, useRef, useEffect } from "react";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import defaultImage from "./HPz3fFn.png";
+import DatePicker from "react-datepicker";
+import Select from "react-select";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import { ToastContainer, toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
+
+const AddUserPage = () => {
+  const initialFormData = {
+  "usrId": "",
+"usrLoginName": "",
+"usrActive": "",
+"usrDefault": "",
+"usrDeptId": "",
+"usrDeptName": "",
+"usrDesignId": "",
+"usrDesignName": "",
+"usrFirstName": "",
+"usrLastName": "",
+"usrFullName": "",
+"usrProfileImgPath": "",
+"usrDOB": "",
+"usrUserType": "",
+"usrUserTypeName": "",
+"usrCategoryId": "",
+"usrCategoryName": "",
+"usrHomeAddrL1": "",
+"usrHomeAddrL2": "",
+"usrHomeAddrL3": "",
+"usrHomeCity": "",
+"usrHomeState": "",
+"usrHomeZip": "",
+"usrHomeCountryId": "",
+"usrHomeCountry": "",
+"usrBussAddrL1": "",
+"usrBussAddrL2": "",
+"usrBussAddrL3": "",
+"usrBussCity": "",
+"usrBussState": "",
+"usrBussZip": "",
+"usrBussCountryId": "",
+"usrBussCountry": "",
+"usrMobile1": "",
+"usrMobile2": "",
+"usrTeleOff": "",
+"usrTeleResi": "",
+"usrFax": "",
+"usrRepDelEmail": "",
+"usrPersonalEmail": "",
+"usrFaceBk": "",
+"usrLinkedIn": "",
+"usrTwitter": "",
+"usrTeams": ""
+  };
+  const initialError={
+    "usrId": "",
+    "usrLoginName": "",
+    "usrActive": "",
+    "usrDefault": "",
+    "usrDeptId": "",
+    "usrDeptName": "",
+    "usrDesignId": "",
+    "usrDesignName": "",
+    "usrFirstName": "",
+    "usrLastName": "",
+    "usrFullName": "",
+    "usrProfileImgPath": "",
+    "usrDOB": "",
+    "usrUserType": "",
+    "usrUserTypeName": "",
+    "usrCategoryId": "",
+    "usrCategoryName": "",
+    "usrHomeAddrL1": "",
+    "usrHomeAddrL2": "",
+    "usrHomeAddrL3": "",
+    "usrHomeCity": "",
+    "usrHomeState": "",
+    "usrHomeZip": "",
+    "usrHomeCountryId": "",
+    "usrHomeCountry": "",
+    "usrBussAddrL1": "",
+    "usrBussAddrL2": "",
+    "usrBussAddrL3": "",
+    "usrBussCity": "",
+    "usrBussState": "",
+    "usrBussZip": "",
+    "usrBussCountryId": "",
+    "usrBussCountry": "",
+    "usrMobile1": "",
+    "usrMobile2": "",
+    "usrTeleOff": "",
+    "usrTeleResi": "",
+    "usrFax": "",
+    "usrRepDelEmail": "",
+    "usrPersonalEmail": "",
+    "usrFaceBk": "",
+    "usrLinkedIn": "",
+    "usrTwitter": "",
+    "usrTeams": ""
+  }
+  const handleClose = () => {
+    setFormData(initialFormData);
+    removeImage();
+    setErrors(initialError);
+  };
+
+  const [image, setImage] = useState({
+    // Image State object
+    placeholderUrl: defaultImage,
+    imageData: null,
+  });
+
+  const formatToDDMMYYYY = (dateString) => {
+    const dateObject = new Date(dateString);
+    const day = dateObject.getDate().toString().padStart(2, "0");
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0"); // Month is zero-based
+    const year = dateObject.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+  const formatToMMDDYYYY = (dateString) => {
+    const [day, month, year] = dateString.split('/');
+    const dateObject = new Date(`${month}/${day}/${year}`);
+    
+    const formattedMonth = (dateObject.getMonth() + 1).toString().padStart(2, "0"); // Month is zero-based
+    const formattedDay = dateObject.getDate().toString().padStart(2, "0");
+    const formattedYear = dateObject.getFullYear();
+    
+    return `${formattedMonth}/${formattedDay}/${formattedYear}`;
+  };
+
+  const location = useLocation();
+  const  RowUserID= location.state?.userId;
+  const [errors, setErrors] = useState({
+    "usrId": "",
+    "usrLoginName": "",
+    "usrActive": "",
+    "usrDefault": "",
+    "usrDeptId": "",
+    "usrDeptName": "",
+    "usrDesignId": "",
+    "usrDesignName": "",
+    "usrFirstName": "",
+    "usrLastName": "",
+    "usrFullName": "",
+    "usrProfileImgPath": "",
+    "usrDOB": "",
+    "usrUserType": "",
+    "usrUserTypeName": "",
+    "usrCategoryId": "",
+    "usrCategoryName": "",
+    "usrHomeAddrL1": "",
+    "usrHomeAddrL2": "",
+    "usrHomeAddrL3": "",
+    "usrHomeCity": "",
+    "usrHomeState": "",
+    "usrHomeZip": "",
+    "usrHomeCountryId": "",
+    "usrHomeCountry": "",
+    "usrBussAddrL1": "",
+    "usrBussAddrL2": "",
+    "usrBussAddrL3": "",
+    "usrBussCity": "",
+    "usrBussState": "",
+    "usrBussZip": "",
+    "usrBussCountryId": "",
+    "usrBussCountry": "",
+    "usrMobile1": "",
+    "usrMobile2": "",
+    "usrTeleOff": "",
+    "usrTeleResi": "",
+    "usrFax": "",
+    "usrRepDelEmail": "",
+    "usrPersonalEmail": "",
+    "usrFaceBk": "",
+    "usrLinkedIn": "",
+    "usrTwitter": "",
+    "usrTeams": ""
+  });
+
+  const [formData, setFormData] = useState([initialFormData]);
+  const [apiDepartmentData, setApiDepartmentData] = useState([]);   //state for  api data of Department
+  const [apiDesignation, setApiDesignationData] =useState([])  //state  for holding the Designation Data from API.
+  const [apiCountry,setApiCountryData]=useState([])  //state for   holding the country list from API
+
+  // Get User Detail By Id
+  useEffect(()=>{ 
+    async function  fetchUserById(id){
+      try{
+        const response = await fetch(`http://192.168.1.62/MARKAS_WEBAPICORE/api/UserDetail/${id}`);
+  
+        // Check if the response is OK
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // Parse the JSON data from the response
+        const data = await response.json();
+        // console.log("User Row Data ",data)
+        setFormData(data[0])
+        console.log("FormData ",formData)
+      }
+      catch(error){
+        console.error("Error fetching Designation data ", error.message);
+      }
+    }
+    fetchUserById(RowUserID)
+  },[RowUserID])
+
+  //Master Data fetch
+  useEffect(() => {
+      //department fetch Data
+    async function fetchDepartment() {
+      try {
+        const response = await fetch("http://192.168.1.62/MARKASV3/api/UserMaster/Departments");
+  
+        // Check if the response is OK
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // Parse the JSON data from the response
+        const data = await response.json();
+        
+        console.log("Department Data", data.value);
+        setApiDepartmentData(data.value);
+      } catch (error) {
+        console.error("Error fetching Department data ", error.message);
+      }
+    }
+    async function fetchDesignation() {
+      try {
+        const response = await fetch("http://192.168.1.62/MARKASV3/api/UserMaster/Designations");
+  
+        // Check if the response is OK
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // Parse the JSON data from the response
+        const data = await response.json();
+        
+        console.log("Designation Data ", data.value);
+        setApiDesignationData(data.value);
+      } catch (error) {
+        console.error("Error fetching Designation data ", error.message);
+      }
+    }
+    async function fetchCountry() {
+      try {
+        const response = await fetch("http://192.168.1.62/MARKASV3/api/UserMaster/Geography");
+  
+        // Check if the response is OK
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // Parse the JSON data from the response
+        const data = await response.json();
+        
+        console.log("Country Data ", data.value);
+        setApiCountryData(data.value);
+      } catch (error) {
+        console.error("Error fetching Country data ", error.message);
+      }
+    }
+    fetchCountry();
+    fetchDepartment();
+    fetchDesignation();
+    console.log("Api Country Data ",...apiCountry)
+  }, []);
+
+  const fileInputRef = useRef(null);
+
+  // const FormValidationSchema = Yup.object({
+  //   firstName: Yup.string().required(),
+  //   lastName: Yup.string().required(),
+  //   emailId1: Yup.string().required().email(),
+  //   phoneNumber1: Yup.string()
+  //     .matches(/^\d{10}$/)
+  //     .required(),
+  //   dob: Yup.date().required(),
+  // });
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = {
+"usrId": "",
+  "usrLoginName": "",
+  "usrActive": "",
+  "usrDefault": "",
+  "usrDeptId": "",
+  "usrDeptName": "",
+  "usrDesignId": "",
+  "usrDesignName": "",
+  "usrFirstName": "",
+  "usrLastName": "",
+  "usrFullName": "",
+  "usrProfileImgPath": "",
+  "usrDOB": "",
+  "usrUserType": "",
+  "usrUserTypeName": "",
+  "usrCategoryId": "",
+  "usrCategoryName": "",
+  "usrHomeAddrL1": "",
+  "usrHomeAddrL2": "",
+  "usrHomeAddrL3": "",
+  "usrHomeCity": "",
+  "usrHomeState": "",
+  "usrHomeZip": "",
+  "usrHomeCountryId": "",
+  "usrHomeCountry": "",
+  "usrBussAddrL1": "",
+  "usrBussAddrL2": "",
+  "usrBussAddrL3": "",
+  "usrBussCity": "",
+  "usrBussState": "",
+  "usrBussZip": "",
+  "usrBussCountryId": "",
+  "usrBussCountry": "",
+  "usrMobile1": "",
+  "usrMobile2": "",
+  "usrTeleOff": "",
+  "usrTeleResi": "",
+  "usrFax": "",
+  "usrRepDelEmail": "",
+  "usrPersonalEmail": "",
+  "usrFaceBk": "",
+  "usrLinkedIn": "",
+  "usrTwitter": "",
+  "usrTeams": ""
+    };
+    // if (!formData.imageFormData) {
+    //   newErrors.imageFormData = "Profile image is required";
+    //   isValid = false;
+    // }
+    if (!formData.usrFirstName) {
+      newErrors.usrFullName = "First name is required";
+      isValid = false;
+      // console.log("First Name validity ", isValid);
+    }
+    if (!formData.usrLastName) {
+      newErrors.usrLastName = "Last name is required";
+      isValid = false;
+    }
+    if (!formData.usrDOB) {
+      newErrors.usrDOB = "Date of birth is required";
+      isValid = false;
+    }
+    if (!formData.usrCategoryName) {
+      newErrors.usrCategoryName = "Category is required";
+      isValid = false;
+    }
+    if (!formData.usrDeptName) {
+      newErrors.usrDeptName = "Department is required";
+      isValid = false;
+    }
+    if (!formData.usrDesignName) {
+      newErrors.usrDesignName = "Designation is required";
+      isValid = false;
+    }
+    if (!formData.usrLoginName) {
+      newErrors.usrLoginName = "Username is required";
+      isValid = false;
+    }
+    if (!formData.usrActive) {
+      newErrors.usrActive = "Is Active check is required";
+      isValid = false;
+    }
+    if (!formData.usrMobile1) {
+      newErrors.usrMobile1 = "Contact number is required";
+      isValid = false;
+    } else if (formData.usrMobile1.toString().length !== 10) {
+      console.log("phone1 lenght ", formData.usrMobile1.toString().length);
+      newErrors.usrMobile1 = "Contact number must be 10 digits";
+      isValid = false;
+    }
+    if (formData.usrMobile2) {
+      if (formData.usrMobile2.toString().length !== 10) {
+        console.log("phone2 lenght ", formData.usrMobile2.toString().length);
+        newErrors.usrMobile2 = "Contact number must be 10 digits";
+        isValid = false;
+      }
+    }
+    const emailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.usrRepDelEmail) {
+      if (!emailFormat.test(formData.usrRepDelEmail)) {
+        newErrors.usrRepDelEmail = "Invalid Email Format";
+        isValid = false;
+      }
+    }
+    if (!formData.usrPersonalEmail?.trim()) {
+      newErrors.usrPersonalEmail = "Personal Email is Required";
+      isValid = false;
+    } else if (!emailFormat.test(formData.usrPersonalEmail)) {
+      newErrors.usrPersonalEmail = "Invalid Email Format";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    console.log("Error ", errors);
+    console.log("Result ", isValid);
+    return isValid;
+  };
+
+  const countryOptions = [
+    { value: "usa", label: "United States" },
+    { value: "canada", label: "Canada" },
+    { value: "uk", label: "United Kingdom" },
+    { value: "india", label: "India" },
+    { value: "australia", label: "Australia" },
+    { value: "germany", label: "Germany" },
+    { value: "france", label: "France" },
+    { value: "japan", label: "Japan" },
+    { value: "brazil", label: "Brazil" },
+  ];
+
+  const CategoryOptions = [
+    { value: "X", label: "x" },
+    { value: "V", label: "v" },
+    { value: "B", label: "b" },
+    { value: "N", label: "n" },
+    { value: "M", label: "m" },
+  ];
+  
+
+  const DesignationOptions = [
+    { value: "X", label: "x" },
+    { value: "V", label: "v" },
+    { value: "B", label: "b" },
+    { value: "N", label: "n" },
+    { value: "M", label: "m" },
+  ];
+
+  //Image Upload Validation
+  const handleUpload = (e) => {
+    const localFile = e.target.files[0];
+    console.log("Local File ", localFile);
+    if (
+      (localFile.type === "image/jpeg" ||
+        localFile.type === "image/png" ||
+        localFile.type === "image/jpg" ||
+        localFile.type === "image/svg") &&
+      localFile.size <= 200 * 1024 // Size limit: 200 KB
+    ) {
+      const reader = new FileReader();
+      reader.onload = (r) => {
+        setImage({
+          placeholderUrl: r.target.result,
+          imageData: e.target.files[0],
+        });
+        // setFormData({
+        //   ...formData,
+        //   imageFormData: e.target.files[0],
+        // });
+      };
+      reader.readAsDataURL(localFile);
+      setErrors({
+        ...errors,
+        imageFormData: "",
+      });
+    } else {
+      setImage({
+        placeholderUrl: defaultImage,
+        imageData: null,
+      });
+      // setFormData({
+      //   ...formData,
+      //   imageFormData: null,
+      // });
+      setErrors({
+        ...errors,
+        imageFormData:
+          (localFile.type === "image/jpeg" ||
+            localFile.type === "image/png" ||
+            localFile.type === "image/jpg" ||
+            localFile.type === "image/svg") &&
+          localFile.size <= 100 * 1024
+            ? "Image size exceeds 200 KB limit."
+            : "Please upload a valid Image file.",
+      });
+      image.imageData = null;
+      resetFileInput();
+    }
+  };
+
+  const resetFileInput = () => {
+    // Reset the value of the file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    let month = today.getMonth() + 1;
+    let day = today.getDate();
+
+    // Add leading zero if needed
+    month = month < 10 ? `0${month}` : month;
+    day = day < 10 ? `0${day}` : day;
+
+    return `${year}-${month}-${day}`;
+  };
+
+  const removeImage = () => {
+    setImage((prevState) => ({
+      ...prevState,
+      placeholderUrl: defaultImage,
+      imageData: null,
+    }));
+    setFormData({
+      ...formData,
+      imageFormData: null,
+    });
+    resetFileInput();
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const isValid = validateForm();
+    if (isValid) {
+      // handleSaveChanges(e);
+      console.log("Form Submitted", formData);
+      toast.success("Form submitted");
+    } else {
+      console.log("Form Validation Failed",formData);
+      toast.error("Form contains validation errors");
+    }
+  };
+  const handleBusinessCountryChange = (selectedOption) => {
+    // Update the formData state with the selected country value
+    setFormData({
+      ...formData,
+      usrBussCountry: selectedOption.gesgeographY_NAME,
+    });
+  };
+
+  const handleHomeCountryChange = (selectedOption) => {
+    // Update the formData state with the selected country value
+    setFormData({
+      ...formData,
+      usrHomeCountry: selectedOption.gesgeographY_NAME,
+    });
+  };
+
+  const handleCategoryChange = (selectedOption) => {
+    // Update the formData state with the selected country value
+    setFormData({
+      ...formData,
+      usrCategoryName: selectedOption.value,
+    });
+  };
+  const handleDepartmentChange = (selectedOption) => {
+    // Update the formData state with the selected country value
+    setFormData({
+      ...formData,
+      usrDeptName: selectedOption.dpsdepartmentname,
+    });
+  };
+  const handleDesignationtChange = (selectedOption) => {
+    // Update the formData state with the selected country value
+    setFormData({
+      ...formData,
+      usrDesignName: selectedOption.dssdesignationname,
+    });
+  };
+
+  const handleCheckboxChange = (event) => {
+    const { checked } = event.target;
+
+    // Update the formData state with the checkbox value
+    setFormData({
+      ...formData,
+      usrActive: checked,
+    });
+  };
+  // const { Formik } = formik;
+
+  return (
+    <>
+
+        <Form className="justify-content-center align-items-center mt-32">
+          {/* <Formik
+            validationSchema={FormValidationSchema}
+            onSubmit={console.log}
+          >
+            {({ handleSubmit, handleChange, values, touched, errors }) => (
+              <Form noValidate onSubmit={handleSubmit}> */}
+            {/* <Scrollbar style={{ width: 250, height: 250 }}>      */}
+            <Container className="d-flex justify-content-center">
+              <Row>
+                <Col xs={12} md={12}>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>Upload Profile Pic</Form.Label>
+                    <Form.Control
+                      type="file"
+                      size="sm"
+                      onChange={handleUpload}
+                      className={`col-3 px-2 py-1 border rounded ${
+                        errors.imageFormData ? "border-danger" : ""
+                      }`}
+                      ref={fileInputRef}
+                    />
+                    <img
+                      src={image.placeholderUrl}
+                      alt=""
+                      id="profilePicPreview"
+                      width={150}
+                      height={180}
+                      className="mt-3 ml-10 mb-3"
+                    />
+                    {errors.imageFormData && (
+                      <p className=" ml-4 text-danger small mt-1">
+                        {errors.imageFormData}
+                      </p>
+                    )}
+                    <span>
+                      {" "}
+                      <Button
+                        size="sm"
+                        variant="danger"
+                        className=" ml-14"
+                        onClick={removeImage}
+                      >
+                        Remove Image
+                      </Button>
+                    </span>
+                  </Form.Group>
+                </Col>
+              </Row>
+            </Container>
+
+            <Container>
+              <Tabs
+                defaultActiveKey="Basic Info"
+                id="justify-tab-example"
+                className="mb-3"
+                justify
+              >
+                {/* Basic Info Tab */}
+                <Tab eventKey="Basic Info" title="Basic Info">
+                  <Row>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-1"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>Work Email Id</Form.Label>
+                        <Form.Control
+                          type="email"
+                          className={`col-3 px-2 py-1 border rounded ${
+                            errors.usrRepDelEmail ? "border-danger" : ""
+                          }`}
+                          value={formData?.usrRepDelEmail}
+                          placeholder="name@example.com"
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrRepDelEmail: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                        {errors.usrRepDelEmail && (
+                          <p className="text-danger small mt-1">
+                            {errors.usrRepDelEmail}
+                          </p>
+                        )}
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-1"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>
+                          Personal Email Id{" "}
+                          <span className="text-danger">*</span>
+                        </Form.Label>
+                        <Form.Control
+                          className={`col-3 px-2 py-1 border rounded ${
+                            errors.usrPersonalEmail ? "border-danger" : ""
+                          }`}
+                          type="email"
+                          placeholder="name@example.com"
+                          value={formData?.usrPersonalEmail}
+                          required
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrPersonalEmail: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                        {errors.usrPersonalEmail && (
+                          <p className="text-danger small mt-1">
+                            {errors.usrPersonalEmail}
+                          </p>
+                        )}
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-1"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>
+                          User Name <span className="text-danger">*</span>
+                        </Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="name@example.com"
+                          required
+                          value={formData?.usrLoginName}
+                          className={`col-3 px-2 py-1 border rounded ${
+                            errors.usrLoginName ? "border-danger" : ""
+                          }`}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrLoginName: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                        {errors.userName && (
+                          <p className="text-danger small mt-1">
+                            {errors.userName}
+                          </p>
+                        )}
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>
+                          First Name <span className="text-danger">*</span>
+                        </Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="FirstName"
+                          className={`col-3 px-2 py-1 border rounded ${
+                            errors.usrFirstName ? "border-danger" : ""
+                          }`}
+                          value={formData?.usrFirstName}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrFirstName: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                        {errors.usrFirstName && (
+                          <p className="text-danger small mt-1">
+                            {errors.usrFirstName}
+                          </p>
+                        )}
+                        {/* <Form.Control.Feedback type="invalid">
+                          {errors.firstName}
+                        </Form.Control.Feedback>*/}
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>
+                          Last Name <span className="text-danger">*</span>
+                        </Form.Label>
+                        <Form.Control
+                        value={formData?.usrLastName}
+                          type="text"
+                          className={`col-3 px-2 py-1 border rounded ${
+                            errors.usrLastName ? "border-danger" : ""
+                          }`}
+                          placeholder="last name"
+                          required
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrLastName: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                        {errors.usrLastName && (
+                          <p className="text-danger small mt-1">
+                            {errors.usrLastName}
+                          </p>
+                        )}
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-1"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>
+                          Date of Birth <span className="text-danger">*</span>
+                        </Form.Label>
+
+                        <Form.Control
+                          type="date"
+                          className={`col-3 px-2 py-1 border rounded ${
+                            errors.usrDOB ? "border-danger" : ""
+                          }`}
+                          value={
+                            formData && formData.usrDOB
+                              ? `${formatToMMDDYYYY(formData.usrDOB).split('/')[2]}-${formatToMMDDYYYY(formData.usrDOB).split('/')[0]}-${formatToMMDDYYYY(formData.usrDOB).split('/')[1]}`
+                              : ''
+                          }
+                          max={getCurrentDate()}
+                          required
+                          onChange={(e) => {
+                            const formattedDate = formatToDDMMYYYY(
+                              e.target.value
+                            );
+                            setFormData({
+                              ...formData,
+                              usrDOB: formattedDate,
+                            });
+                          }}
+                          autoFocus
+                        />
+                        {errors.usrDOB && (
+                          <p className="text-danger small mt-1">{errors.usrDOB}</p>
+                        )}
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>
+                          Category <span className="text-danger">*</span>
+                        </Form.Label>
+                        <Select
+                          value={formData?.usrCategoryName}
+                          onChange={handleCategoryChange}
+                          className={`border rounded ${
+                            errors.usrCategoryName ? "border-danger" : ""
+                          }`}
+                          options={CategoryOptions}
+                          isSearchable={true}
+                          required
+                          autoFocus
+                        />
+                        {errors.usrCategoryName && (
+                          <p className="text-danger small mt-1">
+                            {errors.usrCategoryName}
+                          </p>
+                        )}
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>
+                          Deparment <span className="text-danger">*</span>
+                        </Form.Label>
+                        <Select
+                          value={formData?.usrDeptName}
+                          onChange={handleDepartmentChange}
+                          className={`border rounded ${
+                            errors.usrDeptName ? "border-danger" : ""
+                          }`}
+                          options={apiDepartmentData}
+                          isSearchable={true}
+                          required
+                          autoFocus
+                        />
+                        {errors.usrDeptName && (
+                          <p className="text-danger small mt-1">
+                            {errors.usrDeptName}
+                          </p>
+                        )}
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-1"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>
+                          Designation<span className="text-danger">*</span>
+                        </Form.Label>
+                        <Select
+                        value={formData?.usrDesignName}
+                          onChange={handleDesignationtChange}
+                          className={`border rounded ${
+                            errors.usrDesignName ? "border-danger" : ""
+                          }`}
+                          options={apiDesignation}
+                          isSearchable={true}
+                          required
+                          autoFocus
+                        />
+                        {errors.usrDesignName && (
+                          <p className="text-danger small mt-1">
+                            {errors.usrDesignName}
+                          </p>
+                        )}
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>
+                          Is Active <span className="text-danger">*</span>
+                        </Form.Label>
+                        <div className="mb-3">
+                          <Form.Check
+                            type="checkbox"
+                            id="isActiveCheckbox"
+                            checked={formData?.usrActive}
+                            required
+                            className={`${
+                              errors.usrActive ? "border-danger" : ""
+                            }`}
+                            onChange={handleCheckboxChange}
+                          />
+                        </div>
+                        {errors.usrActive && (
+                          <p className="text-danger small mt-1">
+                            {errors.usrActive}
+                          </p>
+                        )}
+                      </Form.Group>
+                    </Col>
+                    {/* <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>Landline</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="222222222"
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              landline: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                      </Form.Group>
+                    </Col> */}
+                  </Row>
+                </Tab>
+
+                <Tab eventKey="ContactInfo" title="Contact Info">
+                  <Row>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>Contact Number <span className="text-danger">*</span></Form.Label>
+                        <Form.Control
+                          value={formData?.usrMobile1}
+                          type="text"
+                          required
+                          className={`col-3 px-2 py-1 border rounded ${
+                            errors.usrMobile1 ? "border-danger" : ""
+                          }`}
+                          onChange={(e) => {
+                            setFormData({
+                              ...formData,
+                              usrMobile1: e.target.value,
+                            });
+                            console.log("formdata ",formData)
+
+                          }}
+                        />
+                        {errors.usrMobile1 && (
+                          <p className="text-danger small mt-1">
+                            {errors.usrMobile1}
+                          </p>
+                        )}
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>Alt. Contact Number</Form.Label>
+                        <Form.Control
+                         value={formData?.usrMobile2}
+                          type="text"
+                          className={`col-3 px-2 py-1 border rounded ${
+                            errors.usrMobile2 ? "border-danger" : ""
+                          }`}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrMobile2: (e.target.value),
+                            })
+                          }
+                        />
+                        {errors.usrMobile2 && (
+                          <p className="text-danger small mt-1">
+                            {errors.usrMobile2}
+                          </p>
+                        )}
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>Fax</Form.Label>
+                        <Form.Control
+                         value={formData?.usrFax}
+                          type="text"
+                          placeholder="222222222"
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrFax: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>Tel office</Form.Label>
+                        <Form.Control
+                         value={formData?.usrTeleOff}
+                          type="text"
+                          placeholder="222222222"
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrTeleOff: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>Tel Residence</Form.Label>
+                        <Form.Control
+                          value={formData?.usrTeleResi}
+                          type="text"
+                          placeholder="222222222"
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrTeleResi: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                </Tab>
+
+                {/* Address Info Tab */}
+                <Tab eventKey="AddressInfo" title="Address Info">
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <Form.Label className=" mb-2">
+                        Business Address
+                      </Form.Label>
+                      <Form.Control
+                        value={formData?.usrBussAddrL1}
+                        type="text"
+                        placeholder="Line 1"
+                        className=" mb-2"
+                        required
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            usrBussAddrL1: e.target.value,
+                          })
+                        }
+                        autoFocus
+                        // {...(errors.firstName && (
+                        //   <div className="error">{errors.firstName}</div>
+                        // ))}
+                      />
+                    </Col>
+                    <Col xs={12} md={6}>
+                      <Form.Label>Home Address</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Line 1"
+                        className=" mb-2"
+                        required
+                        value={formData?.usrHomeAddrL1}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            usrHomeAddrL1: e.target.value,
+                          })
+                        }
+                        autoFocus
+                      />
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <Form.Control
+                        type="text"
+                        placeholder="Line 2"
+                        className=" mb-2"
+                        required
+                        value={formData?.usrBussAddrL2}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            usrBussAddrL2: e.target.value,
+                          })
+                        }
+                        autoFocus
+                      />
+                    </Col>
+                    <Col xs={12} md={6}>
+                      <Form.Control
+                        type="text"
+                        placeholder="Line 2"
+                        className=" mb-2"
+                        required
+                        value={formData?.usrHomeAddrL2}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            usrHomeAddrL2: e.target.value,
+                          })
+                        }
+                        autoFocus
+                      />
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <Form.Control
+                        type="text"
+                        placeholder="Line 3"
+                        className=" mb-2"
+                        required
+                        value={formData?.usrBussAddrL3}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            usrBussAddrL3: e.target.value,
+                          })
+                        }
+                        autoFocus
+                      />
+                    </Col>
+                    <Col xs={12} md={6}>
+                      <Form.Control
+                        type="text"
+                        placeholder="Line 3"
+                        className=" mb-2"
+                        required
+                        value={formData?.usrHomeAddrL3}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            usrHomeAddrL3: e.target.value,
+                          })
+                        }
+                        autoFocus
+                      />
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <Form.Control
+                        type="text"
+                        placeholder="City"
+                        required
+                        value={formData?.usrBussCity}
+                        className=" mb-2"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            usrBussCity: e.target.value,
+                          })
+                        }
+                        autoFocus
+                      />
+                    </Col>
+                    <Col xs={12} md={6}>
+                      <Form.Control
+                        type="text"
+                        placeholder="City"
+                        required
+                        value={formData?.usrHomeCity}
+                        className=" mb-2"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            usrHomeCity: e.target.value,
+                          })
+                        }
+                        autoFocus
+                      />
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <Form.Control
+                        type="text"
+                        placeholder="State"
+                        required
+                        value={formData?.usrBussState}
+                        className=" mb-2"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            usrBussState: e.target.value,
+                          })
+                        }
+                        autoFocus
+                      />
+                    </Col>
+                    <Col xs={12} md={6}>
+                      <Form.Control
+                        type="text"
+                        placeholder="State"
+                        required
+                        value={formData?.usrHomeState}
+                        className=" mb-2"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            usrHomeState: e.target.value,
+                          })
+                        }
+                        autoFocus
+                      />
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <Form.Control
+                        value={formData?.usrBussZip}
+                        type="text"
+                        placeholder="Zip Code"
+                        required
+                        className=" mb-2"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            usrBussZip: e.target.value,
+                          })
+                        }
+                        autoFocus
+                      />
+                    </Col>
+                    <Col xs={12} md={6}>
+                      <Form.Control
+                        value={formData?.usrHomeZip}
+                        type="text"
+                        placeholder="Zip Code"
+                        required
+                        className=" mb-2"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            usrHomeZip: e.target.value,
+                          })
+                        }
+                        autoFocus
+                      />
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <Select
+                      value={formData?.usrBussCountry}
+                        onChange={handleBusinessCountryChange}
+                        placeholder="Country"
+                        options={apiCountry}
+                        isSearchable={true}
+                      />
+                    </Col>
+                    <Col xs={12} md={6}>
+                      <Select
+                        value={formData?.usrHomeCountry}
+                        onChange={handleHomeCountryChange}
+                        required
+                        options={apiCountry}
+                        placeholder="Country"
+                        isSearchable={true}
+                      />
+                    </Col>
+                  </Row>
+                </Tab>
+
+                {/* Social Info Tab */}
+                <Tab eventKey="Social" title="Social">
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <Form.Group
+                        className="mb-1"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>Facebook Url</Form.Label>
+                        <Form.Control
+                        value={formData?.usrFaceBk}
+                          type="text"
+                          className=" mb-2"
+                          placeholder="Facebook Url"
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrFaceBk: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} md={6}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>LinkedIn Url</Form.Label>
+                        <Form.Control
+                        value={formData?.usrLinkedIn}
+                          type="text"
+                          className=" mb-2"
+                          placeholder="LinkedIn Url"
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrLinkedIn: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>Twitter</Form.Label>
+                        <Form.Control
+                        value={formData?.usrTwitter}
+                          type="text"
+                          className=" mb-2"
+                          placeholder="twitter"
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrTwitter: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} md={6}>
+                      <Form.Group
+                        className="mb-3"
+                        controlId="exampleForm.ControlInput1"
+                      >
+                        <Form.Label>Teams</Form.Label>
+                        <Form.Control
+                        value={formData?.usrTeams}
+                          type="text"
+                          className=" mb-2"
+                          placeholder="Teams"
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              usrTeams: e.target.value,
+                            })
+                          }
+                          autoFocus
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                </Tab>
+              </Tabs>
+              <Button className=" mt-10 float-right bg-green-800 text-white" onClick={handleSubmit}>Save Changes</Button>
+            </Container>
+
+
+        </Form>
+    </>
+  );
+};
+
+export default AddUserPage;
